@@ -67,6 +67,7 @@ def tryTracingBack(): # it's just a bfs
                 directions = []
                 for i in range(len(correctPath) - 1):
                     directions.append(directionToRoom(correctPath[i], correctPath[i + 1]))
+                    seenRooms.add(correctPath[i + 1])
                 return (directions, correctPath[len(correctPath) - 1])
             q.enqueue(searchedRoom)
     return None
@@ -88,13 +89,15 @@ seenRooms.add(0)
 # travel using dft
 currentRoom = 0;
 while True:
-    while not allRoomsAroundSeen(currentRoom):
+    while not allRoomsAroundSeen(currentRoom): # checks if any room around hasn't been seen
         # mark every room as seen_room
-        currentRoom = goIntoFirstUnseenRoom(currentRoom)
+        # add it to traversal path
+        currentRoom = goIntoFirstUnseenRoom(currentRoom) # goes into first unseen room around
     # if no more rooms, loop back to the first room with other unseen rooms
-    # use bfs to get from the dead end to the room with unexplored rooms
+    # use bfs to get from the dead end to the room with unexplored rooms if we can
+    # mark every room it went throught as seen
 
-    tracedValues = tryTracingBack()
+    tracedValues = tryTracingBack() # returns (directions it went back through, destination room) or None
     # if can't trace back, don't add to path
     if tracedValues:
         newPath = tracedValues[0]
